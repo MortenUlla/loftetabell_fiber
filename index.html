@@ -29,7 +29,7 @@
       font-size: 28px;
       color: #333;
     }
-    /* Flex-container som plasserer kalkulator og bilde side om side */
+    /* Flex-container for kalkulator og skisse */
     .calc-wrapper {
       display: flex;
       flex-wrap: wrap;
@@ -61,7 +61,7 @@
       background-color: #fafafa;
       color: #333;
     }
-    /* Fargeboks som viser valgt dimensjonsfarge */
+    /* Fargeboks for å vise valgt dimensjonsfarge */
     .color-box {
       display: inline-block;
       width: 24px;
@@ -95,7 +95,7 @@
       padding: 10px;
       border-radius: 5px;
     }
-    /* Bildedelen – med responsiv tilpasning */
+    /* Skisse-/bildedelen */
     .lift-image {
       flex: 1;
       max-width: 500px;
@@ -172,10 +172,10 @@
           Maks belastning: <span id="maxLoad">0</span> tonn
         </div>
       </div>
-      <!-- Bildedelen -->
+      <!-- Skisse-/bildedelen -->
       <div class="lift-image">
-        <!-- Standardbilde: bytt ut med din egen bildebane -->
-        <img id="liftImage" src="images/lift_rett.jpg" alt="Skisse av løft" />
+        <!-- Her brukes en standard skisse. Denne oppdateres dynamisk -->
+        <img id="liftImage" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><line x1='50' y1='75' x2='250' y2='75' stroke='%238A2BE2' stroke-width='10' /><polygon points='250,75 270,65 270,85' fill='%238A2BE2' /></svg>" alt="Skisse av løft" />
       </div>
     </div>
   </div>
@@ -192,13 +192,13 @@
     document.getElementById('dimension').addEventListener('change', updateDimensionColor);
     updateDimensionColor();
     
-    // Mapping av "attachment" til bildebaner – bytt ut disse baneene med dine bilder
+    // SVG-skisser for de ulike løftene – data-URI-kodet
     const liftImages = {
-      "Rett": "images/lift_rett.jpg",
-      "Snaret": "images/lift_snaret.jpg",
-      "U/Dobbel": "images/lift_udobbel.jpg",
-      "U: 0°-45°": "images/lift_u_0_45.jpg",
-      "U: 45°-60°": "images/lift_u_45_60.jpg"
+      "Rett": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><line x1='50' y1='75' x2='250' y2='75' stroke='%238A2BE2' stroke-width='10' /><polygon points='250,75 270,65 270,85' fill='%238A2BE2' /></svg>",
+      "Snaret": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><circle cx='150' cy='75' r='40' stroke='%23228B22' stroke-width='10' fill='none' /></svg>",
+      "U/Dobbel": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><path d='M50 30 V120 Q100 150, 150 120 V30' stroke='%23FFD700' stroke-width='10' fill='none' /><path d='M150 30 V120 Q200 150, 250 120 V30' stroke='%23FFD700' stroke-width='10' fill='none' /></svg>",
+      "U: 0°-45°": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><path d='M50 75 Q150 30, 250 75' stroke='%23808080' stroke-width='10' fill='none' /></svg>",
+      "U: 45°-60°": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><path d='M50 90 Q150 20, 250 90' stroke='%23FF0000' stroke-width='10' fill='none' /></svg>"
     };
     
     function calculate() {
@@ -225,8 +225,8 @@
       let maxLoad = baseLoad * angleFactor;
       document.getElementById('maxLoad').innerText = maxLoad.toFixed(2);
       
-      // Oppdater bildet basert på valgt innfestingsmåte
-      const imageSrc = liftImages[attachment] || "images/placeholder.jpg";
+      // Oppdater skissen basert på valgt innfestingsmåte
+      const imageSrc = liftImages[attachment] || liftImages["Rett"];
       document.getElementById('liftImage').src = imageSrc;
     }
   </script>
