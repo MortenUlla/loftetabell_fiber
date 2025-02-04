@@ -29,7 +29,7 @@
       font-size: 28px;
       color: #333;
     }
-    /* Flex-container som plasserer kalkulator og skisse side om side */
+    /* Flex-container for kalkulator og skisser */
     .calc-wrapper {
       display: flex;
       flex-wrap: wrap;
@@ -40,7 +40,7 @@
     .calculator {
       background-color: #fff;
       border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       padding: 30px;
       width: 100%;
       max-width: 450px;
@@ -96,16 +96,22 @@
       padding: 10px;
       border-radius: 5px;
     }
-    /* Skisse-/bildedelen */
-    .lift-image {
+    /* Skisseområdene */
+    .sketches {
       flex: 1;
       max-width: 500px;
       margin-left: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
-    .lift-image img {
+    .sketch {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .sketch h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #333;
+    }
+    .sketch img {
       max-width: 100%;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -115,7 +121,7 @@
         flex-direction: column;
         align-items: center;
       }
-      .lift-image {
+      .sketches {
         margin-left: 0;
         margin-top: 20px;
       }
@@ -173,10 +179,18 @@
           Maks belastning: <span id="maxLoad">0</span> tonn
         </div>
       </div>
-      <!-- Skisse-/bildedelen -->
-      <div class="lift-image">
-        <!-- Standard skisse (Rett) – denne oppdateres dynamisk -->
-        <img id="liftImage" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><line x1='50' y1='75' x2='250' y2='75' stroke='%238A2BE2' stroke-width='8' stroke-linecap='round'/><polygon points='250,75 265,65 265,85' fill='%238A2BE2'/></svg>" alt="Skisse av løft" />
+      <!-- Skisseområdene -->
+      <div class="sketches">
+        <div class="sketch">
+          <h3>Innfestingsmåte</h3>
+          <!-- Standard skisse for innfestingsmåte (Rett) -->
+          <img id="attachmentSketch" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><line x1='50' y1='75' x2='250' y2='75' stroke='%238A2BE2' stroke-width='8' stroke-linecap='round'/><polygon points='250,75 265,65 265,85' fill='%238A2BE2'/></svg>" alt="Skisse for innfestingsmåte" />
+        </div>
+        <div class="sketch">
+          <h3>Antall stropper</h3>
+          <!-- Standard skisse for antall stropper (En stropp) -->
+          <img id="strapSketch" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='100'><rect x='50' y='40' width='200' height='20' fill='%23007BFF'/></svg>" alt="Skisse for antall stropper" />
+        </div>
       </div>
     </div>
   </div>
@@ -194,16 +208,10 @@
     updateDimensionColor();
     
     /* 
-      Mapping av innfestingsmåte til SVG-skisser – 
-      skissene er basert på utseendet i Certex sin løftetabell.
-      Ved:
-        "Rett"       : En rett stropp med en liten krok.
-        "Snaret"     : En løkke (sirkel) som symboliserer snaring.
-        "U/Dobbel"   : To U-formede kurver for dobbelt løft.
-        "U: 0°-45°"  : En mild U-kurve.
-        "U: 45°-60°" : En brattere U-kurve.
+      Mapping av innfestingsmåte til SVG-skisser.
+      Skissene er inspirert av Certex sin løftetabell.
     */
-    const liftImages = {
+    const attachmentImages = {
       "Rett": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><line x1='50' y1='75' x2='250' y2='75' stroke='%238A2BE2' stroke-width='8' stroke-linecap='round'/><polygon points='250,75 265,65 265,85' fill='%238A2BE2'/></svg>",
       "Snaret": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><circle cx='150' cy='75' r='40' stroke='%23228B22' stroke-width='8' fill='none'/></svg>",
       "U/Dobbel": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><path d='M50,30 V120 Q90,140,130,120 V30' stroke='%23FFD700' stroke-width='8' fill='none'/><path d='M170,30 V120 Q210,140,250,120 V30' stroke='%23FFD700' stroke-width='8' fill='none'/></svg>",
@@ -211,7 +219,20 @@
       "U: 45°-60°": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><path d='M50,90 Q150,20,250,90' stroke='%23FF0000' stroke-width='8' fill='none'/></svg>"
     };
     
-    // Beregningsfunksjonen: Beregner maks belastning og oppdaterer skissen
+    /* 
+      Mapping av antall stropper til SVG-skisser.
+      Her brukes tre varianter: 
+        "1"   : En stropp.
+        "2"   : To stropper (to parallelle rektangler).
+        "3-4" : Tre stropper (for gruppen tre og fire stropper).
+    */
+    const strapImages = {
+      "1": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='100'><rect x='50' y='40' width='200' height='20' fill='%23007BFF'/></svg>",
+      "2": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='100'><rect x='50' y='25' width='200' height='20' fill='%23007BFF'/><rect x='50' y='55' width='200' height='20' fill='%23007BFF'/></svg>",
+      "3-4": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='120'><rect x='50' y='15' width='200' height='20' fill='%23007BFF'/><rect x='50' y='45' width='200' height='20' fill='%23007BFF'/><rect x='50' y='75' width='200' height='20' fill='%23007BFF'/></svg>"
+    };
+    
+    // Beregningsfunksjonen: Beregner maks belastning og oppdaterer skisser
     function calculate() {
       const dimension = parseFloat(document.getElementById('dimension').value);
       const attachment = document.getElementById('attachment').value;
@@ -239,9 +260,13 @@
       let maxLoad = baseLoad * angleFactor;
       document.getElementById('maxLoad').innerText = maxLoad.toFixed(2);
       
-      // Oppdater skissen basert på valgt innfestingsmåte
-      const imageSrc = liftImages[attachment] || liftImages["Rett"];
-      document.getElementById('liftImage').src = imageSrc;
+      // Oppdater skissen for innfestingsmåte
+      const attSrc = attachmentImages[attachment] || attachmentImages["Rett"];
+      document.getElementById('attachmentSketch').src = attSrc;
+      
+      // Oppdater skissen for antall stropper
+      const strapSrc = strapImages[parts] || strapImages["1"];
+      document.getElementById('strapSketch').src = strapSrc;
     }
   </script>
 </body>
