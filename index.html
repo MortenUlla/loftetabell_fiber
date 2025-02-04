@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Løftekalkulator - Fiberstropper</title>
-  <!-- Google Fonts: Roboto for generell tekst og Orbitron for et digitalt preg på displayet -->
+  <!-- Bruker Google Fonts for et moderne preg: Roboto for vanlig tekst og Orbitron for displayet -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700|Orbitron:500&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Fargepalett og variabler */
+      /* Definerer farger og variabler */
       --primary-color: #007BFF;
       --primary-hover: #0056b3;
-      --body-bg: #f4f4f9;
-      --card-bg: #333;             /* Kalkulatorens ytre ramme (mørk bakgrunn) */
-      --display-bg: #000;          /* Displaybakgrunn */
-      --display-color: #0f0;       /* Digital grønn tekst på display */
+      --body-bg: #2c3e50;          /* Mørk bakgrunnsfarge */
+      --card-bg: #333;             /* Kalkulatorens ytre ramme */
+      --display-bg: #000;          /* Skjermens bakgrunn */
+      --display-color: #0f0;       /* Skjermens digitale grønnfarge */
       --label-color: #fff;
       --input-bg: #555;            /* Bakgrunn for select-boksene */
       --input-text: #fff;
@@ -27,36 +27,20 @@
       box-sizing: border-box;
     }
     
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       font-family: 'Roboto', sans-serif;
-      /* Bakgrunnsbilde med tema for løfteredskaper – bruker en ny URL uten komma */
-      background: url('https://source.unsplash.com/1600x900/?liftinggear') no-repeat center center fixed;
-      background-size: cover;
+      /* Bruker en gradient for et industrielt preg – kan erstattes med et bilde om ønskelig */
+      background: linear-gradient(135deg, #2c3e50, #34495e);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      position: relative;
     }
     
-    /* Overlay for å mørkne bakgrunnen og sikre lesbarhet */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 0;
-    }
-    
-    /* Kalkulatorens container med et tydelig, reelt kalkulator-preg */
+    /* Kalkulatoren – med en klassisk, rundet og mørk "hylse" */
     .calculator {
-      position: relative;
-      z-index: 1;
       width: 90%;
       max-width: 400px;
       background: var(--card-bg);
@@ -66,7 +50,7 @@
       font-size: 16px;
     }
     
-    /* Digitalt display øverst, inspirert av klassiske kalkatorer */
+    /* Display-delen med digitalt utseende */
     .display {
       background: var(--display-bg);
       color: var(--display-color);
@@ -77,7 +61,7 @@
       border-bottom: 2px solid var(--border-color);
     }
     
-    /* Innholdet (kontrollene) i kalkulatoren */
+    /* Innholdskontroller */
     .controls {
       padding: 20px;
     }
@@ -92,7 +76,7 @@
       color: var(--label-color);
     }
     
-    /* For å vise dimensjonsfargen tydelig – en liten fargeboks ved siden av labelen */
+    /* Fargeboks for dimensjonen – viser fargen mer tydelig enn kun en kant */
     .control-group .color-box {
       display: inline-block;
       width: 20px;
@@ -103,7 +87,7 @@
       border-radius: 4px;
     }
     
-    /* Stil på select-elementene slik at de ser ut som trykkknapper på en kalkulator */
+    /* Stiler select-boksene slik at de minner om knapper på en kalkulator */
     select {
       width: 100%;
       padding: 10px;
@@ -120,7 +104,7 @@
       border-color: var(--primary-color);
     }
     
-    /* Kalkulator-knappen med animasjonseffekt ved hover */
+    /* Kalkulator-knappen med bevegelse ved hover */
     button {
       width: 100%;
       padding: 12px;
@@ -145,261 +129,13 @@
   </style>
 </head>
 <body>
+  <!-- Én enkelt kalkulator med display og kontrollseksjon -->
   <div class="calculator">
-    <!-- Display-delen – her vises kalkulatorresultatet med digital stil -->
     <div class="display" id="display">0.00 tonn</div>
     <div class="controls">
       <div class="control-group">
-        <label for="dimension">
-          Velg dimensjon:
-          <!-- Fargeboks for å vise valgt dimensjonsfarge tydelig -->
-          <span id="dimensionColor" class="color-box"></span>
-        </label>
-        <select id="dimension">
-          <option value="1" data-color="#8A2BE2">1 tonn - Fiolett</option>
-          <option value="2" data-color="#228B22">2 tonn - Grønn</option>
-          <option value="3" data-color="#FFD700">3 tonn - Gul</option>
-          <option value="4" data-color="#808080">4 tonn - Grå</option>
-          <option value="5" data-color="#FF0000">5 tonn - Rød</option>
-          <option value="6" data-color="#8B4513">6 tonn - Brun</option>
-          <option value="8" data-color="#1E90FF">8 tonn - Blå</option>
-          <option value="10" data-color="#FFA500">10 tonn - Oransje</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label for="attachment">Velg innfestingsmåte:</label>
-        <select id="attachment">
-          <option value="Rett">Rett</option>
-          <option value="Snaret">Snaret</option>
-          <option value="U/Dobbel">U/Dobbel</option>
-          <option value="U: 0°-45°">U: 0°-45°</option>
-          <option value="U: 45°-60°">U: 45°-60°</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label for="parts">Velg antall parter:</label>
-        <select id="parts">
-          <option value="1">En stropp</option>
-          <option value="2">To stropper</option>
-          <option value="3-4">Tre- og fire stropper</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label for="angle">Velg arbeidsvinkel:</label>
-        <select id="angle">
-          <option value="1.0">0°</option>
-          <option value="0.8">1°-30°</option>
-          <option value="0.7">31°-45°</option>
-          <option value="0.5">46°-60°</option>
-        </select>
-      </div>
-      <button id="calculateBtn">Beregn</button>
-    </div>
-  </div>
-  
-  <script>
-    // Oppdaterer den synlige fargeboksen for dimensjonen basert på valgt option
-    const dimensionSelect = document.getElementById('dimension');
-    const dimensionColorBox = document.getElementById('dimensionColor');
-    
-    function updateDimensionColor() {
-      const selectedOption = dimensionSelect.options[dimensionSelect.selectedIndex];
-      const color = selectedOption.getAttribute('data-color') || '#000';
-      dimensionColorBox.style.backgroundColor = color;
-    }
-    dimensionSelect.addEventListener('change', updateDimensionColor);
-    updateDimensionColor(); // initial oppdatering
-    
-    const calculateBtn = document.getElementById('calculateBtn');
-    const display = document.getElementById('display');
-    
-    calculateBtn.addEventListener('click', calculate);
-    
-    function calculate() {
-      const dimension = parseFloat(document.getElementById('dimension').value);
-      const attachment = document.getElementById('attachment').value;
-      const parts = document.getElementById('parts').value;
-      const angleFactor = parseFloat(document.getElementById('angle').value);
-    
-      let baseLoad = dimension;
-    
-      if (attachment === "Snaret") {
-        baseLoad *= 0.8;
-      } else if (attachment === "U/Dobbel") {
-        baseLoad *= 2.0;
-      } else if (attachment === "U: 0°-45°") {
-        baseLoad *= 1.7;
-      } else if (attachment === "U: 45°-60°") {
-        baseLoad *= 1.4;
-      }
-    
-      if (parts === "2") {
-        baseLoad *= 2.1;
-      } else if (parts === "3-4") {
-        baseLoad *= 3.0;
-      }
-    
-      let maxLoad = baseLoad * angleFactor;
-      display.innerText = maxLoad.toFixed(2) + " tonn";
-    }
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="no">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Løftekalkulator - Fiberstropper</title>
-  <!-- Google Fonts: Roboto for generell tekst og Orbitron for et digitalt preg på displayet -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700|Orbitron:500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      /* Fargepalett og variabler */
-      --primary-color: #007BFF;
-      --primary-hover: #0056b3;
-      --body-bg: #f4f4f9;
-      --card-bg: #333;             /* Kalkulatorens ytre ramme (mørk bakgrunn) */
-      --display-bg: #000;          /* Displaybakgrunn */
-      --display-color: #0f0;       /* Digital grønn tekst på display */
-      --label-color: #fff;
-      --input-bg: #555;            /* Bakgrunn for select-boksene */
-      --input-text: #fff;
-      --border-color: #777;
-      --button-bg: #007BFF;
-      --button-hover: #0056b3;
-    }
-    
-    * {
-      box-sizing: border-box;
-    }
-    
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-      /* Bakgrunnsbilde med tema for løfteredskaper – bruker en ny URL uten komma */
-      background: url('https://source.unsplash.com/1600x900/?liftinggear') no-repeat center center fixed;
-      background-size: cover;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      position: relative;
-    }
-    
-    /* Overlay for å mørkne bakgrunnen og sikre lesbarhet */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 0;
-    }
-    
-    /* Kalkulatorens container med et tydelig, reelt kalkulator-preg */
-    .calculator {
-      position: relative;
-      z-index: 1;
-      width: 90%;
-      max-width: 400px;
-      background: var(--card-bg);
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-      overflow: hidden;
-      font-size: 16px;
-    }
-    
-    /* Digitalt display øverst, inspirert av klassiske kalkatorer */
-    .display {
-      background: var(--display-bg);
-      color: var(--display-color);
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2rem;
-      text-align: right;
-      padding: 20px;
-      border-bottom: 2px solid var(--border-color);
-    }
-    
-    /* Innholdet (kontrollene) i kalkulatoren */
-    .controls {
-      padding: 20px;
-    }
-    
-    .control-group {
-      margin-bottom: 15px;
-    }
-    
-    .control-group label {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--label-color);
-    }
-    
-    /* For å vise dimensjonsfargen tydelig – en liten fargeboks ved siden av labelen */
-    .control-group .color-box {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      margin-left: 10px;
-      vertical-align: middle;
-      border: 2px solid var(--border-color);
-      border-radius: 4px;
-    }
-    
-    /* Stil på select-elementene slik at de ser ut som trykkknapper på en kalkulator */
-    select {
-      width: 100%;
-      padding: 10px;
-      background: var(--input-bg);
-      color: var(--input-text);
-      border: 1px solid var(--border-color);
-      border-radius: 5px;
-      appearance: none;
-      font-size: 1rem;
-    }
-    
-    select:focus {
-      outline: none;
-      border-color: var(--primary-color);
-    }
-    
-    /* Kalkulator-knappen med animasjonseffekt ved hover */
-    button {
-      width: 100%;
-      padding: 12px;
-      background: var(--button-bg);
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      margin-top: 10px;
-    }
-    
-    button:hover {
-      background: var(--button-hover);
-      transform: translateY(-2px);
-    }
-    
-    button:active {
-      transform: translateY(0);
-    }
-  </style>
-</head>
-<body>
-  <div class="calculator">
-    <!-- Display-delen – her vises kalkulatorresultatet med digital stil -->
-    <div class="display" id="display">0.00 tonn</div>
-    <div class="controls">
-      <div class="control-group">
-        <label for="dimension">
-          Velg Dimensjon:
-          <!-- Fargeboks for å vise valgt dimensjonsfarge tydelig -->
+        <label for="dimension">Velg Dimensjon:
+          <!-- Fargeboksen oppdateres dynamisk -->
           <span id="dimensionColor" class="color-box"></span>
         </label>
         <select id="dimension">
@@ -445,7 +181,7 @@
   </div>
   
   <script>
-    // Oppdaterer den synlige fargeboksen for dimensjonen basert på valgt option
+    // Oppdaterer fargeboksen basert på den valgte dimensjonen
     const dimensionSelect = document.getElementById('dimension');
     const dimensionColorBox = document.getElementById('dimensionColor');
     
@@ -454,8 +190,9 @@
       const color = selectedOption.getAttribute('data-color') || '#000';
       dimensionColorBox.style.backgroundColor = color;
     }
+    
     dimensionSelect.addEventListener('change', updateDimensionColor);
-    updateDimensionColor(); // initial oppdatering
+    updateDimensionColor();
     
     const calculateBtn = document.getElementById('calculateBtn');
     const display = document.getElementById('display');
@@ -467,9 +204,9 @@
       const attachment = document.getElementById('attachment').value;
       const parts = document.getElementById('parts').value;
       const angleFactor = parseFloat(document.getElementById('angle').value);
-    
+      
       let baseLoad = dimension;
-    
+      
       if (attachment === "Snaret") {
         baseLoad *= 0.8;
       } else if (attachment === "U/Dobbel") {
@@ -479,13 +216,13 @@
       } else if (attachment === "U: 45°-60°") {
         baseLoad *= 1.4;
       }
-    
+      
       if (parts === "2") {
         baseLoad *= 2.1;
       } else if (parts === "3-4") {
         baseLoad *= 3.0;
       }
-    
+      
       let maxLoad = baseLoad * angleFactor;
       display.innerText = maxLoad.toFixed(2) + " tonn";
     }
