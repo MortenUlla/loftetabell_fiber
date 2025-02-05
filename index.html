@@ -112,14 +112,14 @@
       <div class="calculator">
         <label for="dimension">Velg Dimensjon:</label>
         <select id="dimension">
-          <option value="1">1 tonn - Fiolett</option>
-          <option value="2">2 tonn - Grønn</option>
-          <option value="3">3 tonn - Gul</option>
-          <option value="4">4 tonn - Grå</option>
-          <option value="5">5 tonn - Rød</option>
-          <option value="6">6 tonn - Brun</option>
-          <option value="8">8 tonn - Blå</option>
-          <option value="10">10 tonn - Oransje</option>
+          <option value="1" data-color="#8A2BE2">1 tonn - Fiolett</option>
+          <option value="2" data-color="#228B22">2 tonn - Grønn</option>
+          <option value="3" data-color="#FFD700">3 tonn - Gul</option>
+          <option value="4" data-color="#808080">4 tonn - Grå</option>
+          <option value="5" data-color="#FF0000">5 tonn - Rød</option>
+          <option value="6" data-color="#8B4513">6 tonn - Brun</option>
+          <option value="8" data-color="#1E90FF">8 tonn - Blå</option>
+          <option value="10" data-color="#FFA500">10 tonn - Oransje</option>
         </select>
         
         <label for="attachment">Velg Innfestingsmåte:</label>
@@ -170,6 +170,22 @@
   </div>
   
   <script>
+    // Oppdater dimensjonsfarge
+    function updateDimensionColor() {
+      const dimensionSelect = document.getElementById('dimension');
+      const colorBox = document.getElementById('dimensionColor');
+      const selectedOption = dimensionSelect.options[dimensionSelect.selectedIndex];
+      const color = selectedOption.getAttribute('data-color') || '#ccc';
+      if (colorBox) {
+        colorBox.style.backgroundColor = color;
+      }
+    }
+    // Sjekk at vi har et element for dimensjonsfarge (hvis du har et, f.eks. et <span id="dimensionColor"></span>)
+    if(document.getElementById('dimension')) {
+      document.getElementById('dimension').addEventListener('change', updateDimensionColor);
+      updateDimensionColor();
+    }
+    
     // Mapping for innfestingsmåte (dropdown-verdier må stemme)
     const attachmentImages = {
       "Rett": "images/rett.png",
@@ -179,7 +195,7 @@
       "U: 45°-60°": "images/uformvinkel.png"
     };
     
-    // Mapping for antall stropper, basert på dropdown-verdien og arbeidsvinkelen
+    // Mapping for antall stropper, basert på dropdown-verdien og arbeidsvinkel
     const strapImages = {
       "1": "images/rett.png",  // For én stropp bruker vi innfestingsmåtebildet
       "2": {
