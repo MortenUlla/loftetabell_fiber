@@ -99,14 +99,8 @@
       border-radius: 5px;
     }
     @media (max-width: 800px) {
-      .calc-wrapper {
-        flex-direction: column;
-        align-items: center;
-      }
-      .sketches {
-        margin-left: 0;
-        margin-top: 20px;
-      }
+      .calc-wrapper { flex-direction: column; align-items: center; }
+      .sketches { margin-left: 0; margin-top: 20px; }
     }
     /* Stil for fargeboksen ved dimensjon */
     .color-box {
@@ -140,7 +134,7 @@
         </select>
 
         <label for="attachment">Velg Innfestingsmåte:</label>
-        <select id="attachment">
+        <select id="attachment" onchange="updateAttachmentImage()">
           <option value="Rett">Rett</option>
           <option value="Snaret">Snaret</option>
           <option value="U/Dobbel">U/Dobbel</option>
@@ -149,14 +143,14 @@
         </select>
 
         <label for="parts">Velg antall stropper:</label>
-        <select id="parts">
+        <select id="parts" onchange="updateStrapImage()">
           <option value="1">En stropp</option>
           <option value="2">To stropper</option>
           <option value="3-4">Tre og fire stropper</option>
         </select>
 
         <label for="angle">Velg Arbeidsvinkel:</label>
-        <select id="angle">
+        <select id="angle" onchange="updateStrapImage()">
           <option value="1.0">0°</option>
           <option value="0.8">1°–30°</option>
           <option value="0.7">31°–45°</option>
@@ -173,13 +167,13 @@
       <div class="sketches">
         <div class="sketch">
           <h3>Innfestingsmåte</h3>
-          <!-- Bruk en standard bildebane; den oppdateres dynamisk -->
-          <img id="attachmentSketch" src="images/rett.png" alt="Innfestingsmåte" onerror="this.src='images/error.png'">
+          <!-- Bildet for innfestingsmåte – oppdateres dynamisk -->
+          <img id="attachmentSketch" src="rett.png" alt="Innfestingsmåte" onerror="this.src='error.png'">
         </div>
         <div class="sketch">
           <h3>Antall stropper</h3>
-          <!-- Dette bildet oppdateres dynamisk -->
-          <img id="strapSketch" src="images/rett.png" alt="Antall stropper" onerror="this.src='images/error.png'">
+          <!-- Bildet for antall stropper – oppdateres dynamisk -->
+          <img id="strapSketch" src="rett.png" alt="Antall stropper" onerror="this.src='error.png'">
         </div>
       </div>
     </div>
@@ -201,27 +195,27 @@
 
     // Mapping for innfestingsmåte
     const attachmentImages = {
-      "Rett": "images/rett.png",
-      "Snaret": "images/snaret.png",
-      "U/Dobbel": "images/uform2.png",
-      "U: 0°-45°": "images/uformvinkel.png",
-      "U: 45°-60°": "images/uformvinkel.png"
+      "Rett": "rett.png",
+      "Snaret": "snaret.png",
+      "U/Dobbel": "uform2.png",
+      "U: 0°-45°": "uformvinkel.png",
+      "U: 45°-60°": "uformvinkel.png"
     };
 
     // Mapping for antall stropper med arbeidsvinkel
     const strapImages = {
-      "1": "images/rett.png",  // For én stropp bruker vi innfestingsmåtebildet
+      "1": "rett.png",  // For én stropp bruker vi innfestingsmåtebildet
       "2": {
-        "1.0": "images/tostropper_0.png",
-        "0.8": "images/tostropper_45.png",
-        "0.7": "images/tostropper_452.png",
-        "0.5": "images/tostropper_60.png"
+        "1.0": "tostropper_0.png",
+        "0.8": "tostropper_45.png",
+        "0.7": "tostropper_452.png",
+        "0.5": "tostropper_60.png"
       },
       "3-4": {
-        "1.0": "images/trestropper_0.png",
-        "0.8": "images/stroppertrestropper_45.png",
-        "0.7": "images/trestropper_452.png",
-        "0.5": "images/trestropper_60.png"
+        "1.0": "trestropper_0.png",
+        "0.8": "stroppertrestropper_45.png",
+        "0.7": "trestropper_452.png",
+        "0.5": "trestropper_60.png"
       }
     };
 
@@ -237,12 +231,11 @@
       const angle = document.getElementById('angle').value;
       let imgSrc = "";
       if (parts === "1") {
-        // Bruk innfestingsmåtebildet ved 1 stropp
-        imgSrc = attachmentImages[document.getElementById('attachment').value] || "images/rett.png";
+        imgSrc = attachmentImages[document.getElementById('attachment').value] || "rett.png";
       } else if (parts === "2") {
-        imgSrc = strapImages["2"][angle] || "images/tostropper_0.png";
+        imgSrc = strapImages["2"][angle] || "tostropper_0.png";
       } else if (parts === "3-4") {
-        imgSrc = strapImages["3-4"][angle] || "images/trestropper_0.png";
+        imgSrc = strapImages["3-4"][angle] || "trestropper_0.png";
       }
       document.getElementById('strapSketch').src = imgSrc;
     }
@@ -276,4 +269,3 @@
   </script>
 </body>
 </html>
-
