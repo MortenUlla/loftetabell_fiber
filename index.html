@@ -102,7 +102,7 @@
       .calc-wrapper { flex-direction: column; align-items: center; }
       .sketches { margin-left: 0; margin-top: 20px; }
     }
-    /* Stil for fargeboksen ved dimensjon */
+    /* Fargeboks for dimensjon */
     .color-box {
       display: inline-block;
       width: 20px;
@@ -119,7 +119,7 @@
     <div class="calc-wrapper">
       <!-- Kalkulatoren -->
       <div class="calculator">
-        <label for="dimension">Dimensjon:
+        <label for="dimension">Velg Dimensjon:
           <span id="dimensionColor" class="color-box"></span>
         </label>
         <select id="dimension">
@@ -133,7 +133,7 @@
           <option value="10" data-color="#FFA500">10 tonn - Oransje</option>
         </select>
 
-        <label for="attachment">Innfestingsmåte:</label>
+        <label for="attachment">Velg Innfestingsmåte:</label>
         <select id="attachment" onchange="updateAttachmentImage()">
           <option value="Rett">Rett</option>
           <option value="Snaret">Snaret</option>
@@ -142,14 +142,14 @@
           <option value="U: 45°-60°">U: 45°-60°</option>
         </select>
 
-        <label for="parts">Antall stropper:</label>
+        <label for="parts">Velg antall stropper:</label>
         <select id="parts" onchange="updateStrapImage()">
           <option value="1">En stropp</option>
           <option value="2">To stropper</option>
-          <option value="3-4">Tre og fire stropper</option>
+          <option value="3">Tre stropper</option>
         </select>
 
-        <label for="angle">Arbeidsvinkel:</label>
+        <label for="angle">Velg Arbeidsvinkel:</label>
         <select id="angle" onchange="updateStrapImage()">
           <option value="1.0">0°</option>
           <option value="0.8">1°–30°</option>
@@ -167,12 +167,10 @@
       <div class="sketches">
         <div class="sketch">
           <h3>Innfestingsmåte</h3>
-          <!-- Bildet for innfestingsmåte – oppdateres dynamisk -->
           <img id="attachmentSketch" src="rett.png" alt="Innfestingsmåte" onerror="this.src='error.png'">
         </div>
         <div class="sketch">
           <h3>Antall stropper</h3>
-          <!-- Bildet for antall stropper – oppdateres dynamisk -->
           <img id="strapSketch" src="rett.png" alt="Antall stropper" onerror="this.src='error.png'">
         </div>
       </div>
@@ -211,9 +209,9 @@
         "0.7": "tostropper_452.png",
         "0.5": "tostropper_60.png"
       },
-      "3-4": {
+      "3": {
         "1.0": "trestropper_0.png",
-        "0.8": "stroppertrestropper_45.png",
+        "0.8": "trestropper_45.png",
         "0.7": "trestropper_452.png",
         "0.5": "trestropper_60.png"
       }
@@ -234,8 +232,8 @@
         imgSrc = attachmentImages[document.getElementById('attachment').value] || "rett.png";
       } else if (parts === "2") {
         imgSrc = strapImages["2"][angle] || "tostropper_0.png";
-      } else if (parts === "3-4") {
-        imgSrc = strapImages["3-4"][angle] || "trestropper_0.png";
+      } else if (parts === "3") {
+        imgSrc = strapImages["3"][angle] || "trestropper_0.png";
       }
       document.getElementById('strapSketch').src = imgSrc;
     }
@@ -258,7 +256,7 @@
       }
       if (parts === "2") {
         baseLoad *= 2.1;
-      } else if (parts === "3-4") {
+      } else if (parts === "3") {
         baseLoad *= 3.0;
       }
       const maxLoad = baseLoad * angleFactor;
