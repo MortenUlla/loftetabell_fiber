@@ -138,74 +138,37 @@
         
         <label for="attachment">Velg innfestingsmåte:</label>
         <select id="attachment" onchange="updateAttachmentImage()">
-          <option value="Rett">En stropp rett</option>
-          <option value="Snaret">En stropp snaret</option>
-          <option value="U/Dobbel">En stropp U-form</option>
-          <option value="U: 0°-45°">En stropp U-form i vinkel</option>
+          <option value="Rett">Rett</option>
+          <option value="Snaret">Snaret</option>
+          <option value="U/Dobbel">U/Dobbel</option>
+          <option value="U: 0°-45°">U: 0°-45°</option>
+          <option value="U: 45°-60°">U: 45°-60°</option>
+        </select>
+        
+        <label for="parts">Velg antall parter:</label>
+        <select id="parts">
+          <option value="1">En Stropp</option>
+          <option value="2">To Stropper</option>
+          <option value="3-4">Tre- og Fire Stropper</option>
+        </select>
+        
+        <label for="angle">Velg arbeidsvinkel:</label>
+        <select id="angle">
+          <option value="1.0">0°</option>
+          <option value="0.8">1°-30°</option>
+          <option value="0.7">31°-45°</option>
+          <option value="0.5">46°-60°</option>
+        </select>
+        
+        <label for="symmetry">Symmetrisk/Usymmetrisk:</label>
+        <select id="symmetry">
+          <option value="Symmetrisk">Symmetrisk</option>
+          <option value="Usymmetrisk">Usymmetrisk</option>
         </select>
         
         <button onclick="calculate()">Beregn</button>
         
         <div class="result" id="result">
-          Maks belastning: <span id="maxLoad">0</span> tonn
-        </div>
-      </div>
-      
-      <div class="sketches">
-        <h3>Innfestingsmåte</h3>
-        <img id="attachmentImage" src="" alt="Innfestingsbilde">
-      </div>
-    </div>
-  </div>
-  
-  <script>
-    function updateDimensionColor() {
-      const dimensionSelect = document.getElementById('dimension');
-      const colorBox = document.getElementById('dimensionColor');
-      const selectedOption = dimensionSelect.options[dimensionSelect.selectedIndex];
-      const color = selectedOption.getAttribute('data-color') || '#ccc';
-      colorBox.style.backgroundColor = color;
-    }
-    document.getElementById('dimension').addEventListener('change', updateDimensionColor);
-    updateDimensionColor();
-
-    const attachmentImages = {
-      "Rett": "rett.png",
-      "Snaret": "snaret.png",
-      "U/Dobbel": "uform2.png",
-      "U: 0°-45°": "uformvinkel.png"
-    };
-
-    function updateAttachmentImage() {
-      const selectedAttachment = document.getElementById("attachment").value;
-      const imageElement = document.getElementById("attachmentImage");
-
-      if (attachmentImages[selectedAttachment]) {
-        imageElement.src = attachmentImages[selectedAttachment];
-        imageElement.style.display = "block";
-      } else {
-        imageElement.style.display = "none";
-      }
-    }
-
-    function calculate() {
-      const dimension = parseFloat(document.getElementById('dimension').value);
-      const attachment = document.getElementById('attachment').value;
-
-      let baseLoad = dimension;
-      
-      if (attachment === "Snaret") {
-        baseLoad *= 0.8;
-      } else if (attachment === "U/Dobbel") {
-        baseLoad *= 2.0;
-      } else if (attachment === "U: 0°-45°") {
-        baseLoad *= 1.7;
-      }
-
-      document.getElementById('maxLoad').innerText = baseLoad.toFixed(2);
-    }
-
-    window.onload = updateAttachmentImage;
-  </script>
-</body>
-</html>
+          Maks belast
+::contentReference[oaicite:0]{index=0}
+ 
