@@ -148,14 +148,16 @@
         
         <button onclick="calculate()">Beregn</button>
         
-        <div class="result" id="result">Maks belastning: <span id="maxLoad">0</span> tonn</div>
+        <div class="result" id="result">
+          Maks belastning: <span id="maxLoad">0</span> tonn
+        </div>
       </div>
       
       <!-- Skisseområdene -->
       <div class="sketches">
         <div class="sketch">
           <h3>Innfestingsmåte</h3>
-          <!-- Bildet for innfestingsmåte -->
+          <!-- Bildet for innfestingsmåte – oppdateres dynamisk -->
           <img id="attachmentSketch" src="images/rett.png" alt="Innfestingsmåte">
         </div>
         <div class="sketch">
@@ -168,7 +170,7 @@
   </div>
   
   <script>
-    // Mapping for innfestingsmåte – nøklene samsvarer med dropdown-verdiene
+    // Mapping for innfestingsmåte (dropdown-verdier må stemme)
     const attachmentImages = {
       "Rett": "images/rett.png",
       "Snaret": "images/snaret.png",
@@ -177,38 +179,49 @@
       "U: 45°-60°": "images/uformvinkel.png"
     };
     
-    // Funksjon for å oppdatere bildet for innfestingsmåte
+    // Mapping for antall stropper, basert på dropdown-verdien og arbeidsvinkelen
+    const strapImages = {
+      "1": "images/rett.png",  // For én stropp bruker vi innfestingsmåtebildet
+      "2": {
+        "1.0": "images/tostropper_0.png",
+        "0.8": "images/tostropper_45.png",
+        "0.7": "images/tostropper_452.png",
+        "0.5": "images/tostropper_60.png"
+      },
+      "3-4": {
+        "1.0": "images/trestropper_0.png",
+        "0.8": "images/stroppertrestropper_45.png",
+        "0.7": "images/trestropper_452.png",
+        "0.5": "images/trestropper_60.png"
+      }
+    };
+    
+    // Oppdater bildet for innfestingsmåte
     function updateAttachmentImage() {
       const attachment = document.getElementById('attachment').value;
       const attSrc = attachmentImages[attachment] || attachmentImages["Rett"];
       document.getElementById('attachmentSketch').src = attSrc;
     }
     
-    // Funksjon for å oppdatere bildet for antall stropper
+    // Oppdater bildet for antall stropper basert på parts og angle
     function updateStrapImage() {
       const parts = document.getElementById('parts').value;
-      const angle = parseFloat(document.getElementById('angle').value);
+      const angle = document.getElementById('angle').value;
       let imageSrc = "";
       
       if (parts === "1") {
-        // For én stropp kan vi for eksempel bruke samme bilde som innfestingsmåte
+        // For én stropp, bruk bildet fra innfestingsmåte
         imageSrc = attachmentImages[document.getElementById('attachment').value] || "images/rett.png";
       } else if (parts === "2") {
-        if(angle === 1.0) { imageSrc = "images/tostropper_0.png"; }
-        else if(angle === 0.8) { imageSrc = "images/tostropper_45.png"; }
-        else if(angle === 0.7) { imageSrc = "images/tostropper_452.png"; }
-        else if(angle === 0.5) { imageSrc = "images/tostropper_60.png"; }
+        imageSrc = strapImages["2"][angle] || "images/tostropper_0.png";
       } else if (parts === "3-4") {
-        if(angle === 1.0) { imageSrc = "images/trestropper_0.png"; }
-        else if(angle === 0.8) { imageSrc = "images/stroppertrestropper_45.png"; }
-        else if(angle === 0.7) { imageSrc = "images/trestropper_452.png"; }
-        else if(angle === 0.5) { imageSrc = "images/trestropper_60.png"; }
+        imageSrc = strapImages["3-4"][angle] || "images/trestropper_0.png";
       }
       
       document.getElementById('strapSketch').src = imageSrc;
     }
     
-    // Beregningsfunksjonen – her kan du beholde din opprinnelige logikk for kalkulasjon
+    // Kalkuler funksjonen – oppdaterer beregning og bildene
     function calculate() {
       const dimension = parseFloat(document.getElementById('dimension').value);
       const attachment = document.getElementById('attachment').value;
@@ -217,7 +230,7 @@
       
       let baseLoad = dimension;
       
-      // Juster baselasten etter innfestingsmåte (samme logikk som før)
+      // Juster for innfestingsmåte
       if (attachment === "Snaret") {
         baseLoad *= 0.8;
       } else if (attachment === "U/Dobbel") {
@@ -238,12 +251,12 @@
       let maxLoad = baseLoad * angleFactor;
       document.getElementById('maxLoad').innerText = maxLoad.toFixed(2);
       
-      // Oppdater bildene basert på valg
+      // Oppdater bildene
       updateAttachmentImage();
       updateStrapImage();
     }
     
-    // Lytt til endringer slik at bildene oppdateres løpende (valgfritt)
+    // Oppdater bildene ved endring (valgfritt)
     document.getElementById('attachment').addEventListener('change', updateAttachmentImage);
     document.getElementById('parts').addEventListener('change', updateStrapImage);
     document.getElementById('angle').addEventListener('change', updateStrapImage);
